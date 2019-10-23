@@ -3,6 +3,10 @@
 
 using namespace std;
 
+// declarations
+bool is_a_center(long, int[], long);
+long closest_center(long, int[], long, long);
+
 int main (int argc, char *argv[])
 {	
 	int* img;
@@ -29,7 +33,7 @@ int main (int argc, char *argv[])
 	for (int i = 0; i < v_pts; i++){
 		v_local = distr(generator);
 		
-		while(img[v_local] == -1){
+		while(img[v_local] != 0){
 			v_local = distr(generator);
 		}
 		v_locations[i] = v_local;
@@ -37,6 +41,14 @@ int main (int argc, char *argv[])
 		img[v_local] = i + 1;
 	}
 	
+	// calculate distances
+	for (int i = 0; i < dim*dim; i++){
+		// check if pixel is a center
+		if (!is_a_center(i, v_locations, v_pts)){
+			img[i] = closest_center(i, v_locations, v_pts, dim);
+		} 
+		
+	}
 	
 	
 	
@@ -49,11 +61,51 @@ int main (int argc, char *argv[])
 			cout << img[i] << endl;
 		}
 	
-	for(int i = 0; i < v_pts; i++)
+	for(int i = 0; i < v_pts; i++){
 		cout << v_locations[i] << " ";
+	}	
 
 	
 	cout << endl;
 	
 	return 0;
+}
+
+bool is_a_center(long check, int center_list[], long size){
+	for(long i = 0; i < size; i++){
+		if(center_list[i] == check) return true;
+	}
+	return false;
+}
+
+long closest_center(long point, int center_list[], long center_list_size, long dim){
+	float distance;
+	long shortest_dist = 0;
+	long x_point, y_point;
+	long x_center, y_center;
+	long closest_center;
+	
+	// extract x and y components
+	x_point = point / dim;
+	y_point = point % dim;
+	
+	for(long i = 0; i < center_list_size; i++){
+		x_center = center_list[i] / dim;
+		y_center = center_list[i] % dim;
+			
+		distance = sqrt(pow(1.0 * x_center - x_point, 2) + pow(1.0 * y_center - y_point, 2));
+		cout << "center: (" << x_center << ", " << y_center << ")" << endl;
+		cout << "point:  (" << x_point << ", " << y_point << ")" << endl;
+		cout << "distance: " << distance << endl;
+		
+		if(i == 0){
+			shortest_dist = distance;
+			closest_center = center_list[i];
+		} else if(distance < shortest_dist){
+			shortest_dist = distance;
+			closest_center = center_list[i];
+		}
+	}
+	
+	return closest_center;
 }
