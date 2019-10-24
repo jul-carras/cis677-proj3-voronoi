@@ -80,7 +80,7 @@ bool is_a_center(long check, int center_list[], long size){
 
 long closest_center(long point, int center_list[], long center_list_size, long dim){
 	float distance;
-	long shortest_dist;
+	float shortest_dist = 0.0;
 	long x_point, y_point;
 	long x_center, y_center;
 	long closest_center;
@@ -94,18 +94,32 @@ long closest_center(long point, int center_list[], long center_list_size, long d
 		y_center = center_list[i] % dim;
 			
 		distance = sqrt(pow(1.0 * x_center - x_point, 2) + pow(1.0 * y_center - y_point, 2));
-		cout << "center: (" << x_center << ", " << y_center << ")" << endl;
-		cout << "point:  (" << x_point << ", " << y_point << ")" << endl;
-		cout << "distance: " << distance << endl;
+		//cout << "center: (" << x_center << ", " << y_center << ")" << endl;
+		//cout << "point:  (" << x_point << ", " << y_point << ")" << endl;
+		//cout << "distance: " << distance << endl;
 		
 		// are we in the first iteration? Take that distance
 		if(i == 0){
+			cout << "i is " << i << endl;
+			cout << "shortest_dist = " << shortest_dist << endl;
+			cout << "distance = " << distance << endl;
+			
 			shortest_dist = distance;
 			closest_center = center_list[i];
+			
+			cout << "shortest_dist = " << shortest_dist << endl;
+			cout << "distance = " << distance << endl;
+			
 		// if not, then check to see if the new distance we calculated is smaller
 		} else if(distance < shortest_dist){
+			cout << "i is " << i << endl;
+			cout << "shortest_dist = " << shortest_dist << endl;
+			cout << "distance = " << distance << endl;
 			shortest_dist = distance;
 			closest_center = center_list[i];
+			cout << "shortest_dist = " << shortest_dist << endl;
+			cout << "distance = " << distance << endl;
+			
 		}
 	}
 	
