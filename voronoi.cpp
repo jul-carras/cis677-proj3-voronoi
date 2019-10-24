@@ -46,7 +46,9 @@ int main (int argc, char *argv[])
 		// check if pixel is a center
 		if (!is_a_center(i, v_locations, v_pts)){
 			img[i] = closest_center(i, v_locations, v_pts, dim);
-		} 
+		} else {
+			img[i] = 0;
+		}
 		
 	}
 	
@@ -91,37 +93,18 @@ long closest_center(long point, int center_list[], long center_list_size, long d
 	
 	for(long i = 0; i < center_list_size; i++){
 		x_center = center_list[i] / dim;
-		y_center = center_list[i] % dim;
-			
+		y_center = center_list[i] % dim;	
 		distance = sqrt(pow(1.0 * x_center - x_point, 2) + pow(1.0 * y_center - y_point, 2));
-		//cout << "center: (" << x_center << ", " << y_center << ")" << endl;
-		//cout << "point:  (" << x_point << ", " << y_point << ")" << endl;
-		//cout << "distance: " << distance << endl;
 		
 		// are we in the first iteration? Take that distance
-		if(i == 0){
-			cout << "i is " << i << endl;
-			cout << "shortest_dist = " << shortest_dist << endl;
-			cout << "distance = " << distance << endl;
-			
+		if(i == 0){	
 			shortest_dist = distance;
-			closest_center = center_list[i];
-			
-			cout << "shortest_dist = " << shortest_dist << endl;
-			cout << "distance = " << distance << endl;
-			
+			closest_center = i + 1;
 		// if not, then check to see if the new distance we calculated is smaller
 		} else if(distance < shortest_dist){
-			cout << "i is " << i << endl;
-			cout << "shortest_dist = " << shortest_dist << endl;
-			cout << "distance = " << distance << endl;
 			shortest_dist = distance;
-			closest_center = center_list[i];
-			cout << "shortest_dist = " << shortest_dist << endl;
-			cout << "distance = " << distance << endl;
-			
+			closest_center = i + 1;
 		}
 	}
-	
 	return closest_center;
 }
