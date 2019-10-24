@@ -33,11 +33,11 @@ int main (int argc, char *argv[])
 	for (int i = 0; i < v_pts; i++){
 		v_local = distr(generator);
 		
+		// check that the location wasn't already selected
 		while(img[v_local] != 0){
 			v_local = distr(generator);
 		}
 		v_locations[i] = v_local;
-
 		img[v_local] = i + 1;
 	}
 	
@@ -52,10 +52,7 @@ int main (int argc, char *argv[])
 		
 	}
 	
-	
-	
-	
-// viz	
+	// viz	
 	for (int i = 0; i < dim*dim; i++)
 		if((i + 1) % dim != 0){
 			cout << img[i] << " ";
@@ -86,12 +83,16 @@ long closest_center(long point, int center_list[], long center_list_size, long d
 	long x_point, y_point;
 	long x_center, y_center;
 	long closest_center;
-	
-	// extract x and y components
+	int *colors[];
+
+	colors = new int[center_list_size];
+	// extract x and y components for the checked point
 	x_point = point / dim;
 	y_point = point % dim;
 	
+	// run distances against all listed centers
 	for(long i = 0; i < center_list_size; i++){
+		// extract x and y components for the center
 		x_center = center_list[i] / dim;
 		y_center = center_list[i] % dim;	
 		distance = sqrt(pow(1.0 * x_center - x_point, 2) + pow(1.0 * y_center - y_point, 2));
@@ -101,10 +102,11 @@ long closest_center(long point, int center_list[], long center_list_size, long d
 			shortest_dist = distance;
 			closest_center = i + 1;
 		// if not, then check to see if the new distance we calculated is smaller
+		// note this produces a first calculated point for contested areas
 		} else if(distance < shortest_dist){
 			shortest_dist = distance;
 			closest_center = i + 1;
-		}
+		} 
 	}
 	return closest_center;
 }
