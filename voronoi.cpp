@@ -7,6 +7,16 @@ using namespace std;
 bool is_a_center(long, int[], long);
 long closest_center(long, int[], long, long);
 
+class v_point
+{
+	public:
+	
+	long position;
+	int red;
+	int blue;
+	int green;
+}
+
 int main (int argc, char *argv[])
 {	
 	int* img;
