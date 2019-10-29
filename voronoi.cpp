@@ -15,13 +15,13 @@ class v_point
 	int red;
 	int blue;
 	int green;
-}
+};
 
 int main (int argc, char *argv[])
 {	
-	int* img;
+	v_point* img;
 	int* v_locations;
-	int v_local;
+	v_point v_local;
 	random_device dice;
 	mt19937 generator(dice());
 	
@@ -32,32 +32,26 @@ int main (int argc, char *argv[])
 	
 	long dim = atol (argv[1]);
 	long v_pts = atol(argv[2]);
-	uniform_int_distribution<int> distr(0, dim*dim);
+	uniform_int_distribution<int> distr(0, dim*dim - 1);
 	
-	img = new int[dim*dim];
+	img = new v_point[dim*dim];
 	v_locations = new int[v_pts];
+	v_local.position = 0;
 	
 	cout << "Image Dim: " << dim << endl;
 	cout << "Voronoi Points: " << v_pts << endl;
 	// place points using a uniform distribution
-	for (int i = 0; i < v_pts; i++){
-		v_local = distr(generator);
-		
-		// check that the location wasn't already selected
-		while(img[v_local] != 0){
-			v_local = distr(generator);
-		}
-		v_locations[i] = v_local;
-		img[v_local] = i + 1;
+	for (long i = 0; i < v_pts; i++){
+		v_locations[i] = distr(generator);
 	}
 	
 	// calculate distances
 	for (int i = 0; i < dim*dim; i++){
 		// check if pixel is a center
 		if (!is_a_center(i, v_locations, v_pts)){
-			img[i] = closest_center(i, v_locations, v_pts, dim);
+			img[i].position = closest_center(i, v_locations, v_pts, dim);
 		} else {
-			img[i] = 0;
+			img[i].position = 0;
 		}
 		
 	}
@@ -65,9 +59,9 @@ int main (int argc, char *argv[])
 	// viz	
 	for (int i = 0; i < dim*dim; i++)
 		if((i + 1) % dim != 0){
-			cout << img[i] << " ";
+			cout << img[i].position << " ";
 		} else {
-			cout << img[i] << endl;
+			cout << img[i].position << endl;
 		}
 	
 	for(int i = 0; i < v_pts; i++){
@@ -93,9 +87,7 @@ long closest_center(long point, int center_list[], long center_list_size, long d
 	long x_point, y_point;
 	long x_center, y_center;
 	long closest_center;
-	int *colors[];
 
-	colors = new int[center_list_size];
 	// extract x and y components for the checked point
 	x_point = point / dim;
 	y_point = point % dim;
